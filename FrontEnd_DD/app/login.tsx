@@ -6,6 +6,7 @@ import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from "rea
 
 export default function LoginScreen() {
 const [email, setEmail] = useState('');
+const [password, setPassword] = useState('');
 const router = useRouter();
 const {login} = useAuth();
 
@@ -21,8 +22,8 @@ const registroProveedorRou = () => {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Iniciar Sesión</Text>
-            <TextInput style={styles.input} placeholder="Usuario" value={email} onChangeText={setEmail} />
             <TextInput style={styles.input} placeholder="Correo Electrónico" value={email} onChangeText={setEmail} />
+            <TextInput style={styles.input} placeholder="Contraseña" value={password} onChangeText={setPassword} />
             <TouchableOpacity style={styles.button} onPress={()=>{login(email); router.replace('/home')}}>
               <Text style={styles.buttonText}>Ingresar</Text>
             </TouchableOpacity>
