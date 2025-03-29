@@ -1,3 +1,4 @@
+import { BASE_URL } from "@/config/api";
 import { createContext, isValidElement, useContext, useState } from "react"
 
 type User = {email: string} | null;
@@ -5,7 +6,7 @@ type User = {email: string} | null;
 const AuthContext = createContext<{
     user: User,
     isAllowed: boolean;
-    login: (email: string) => void;
+    login: (email: string, password: string) => void;
     logout: () => void;
 } | null>(null);
 
@@ -19,17 +20,29 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
     const [user, setUser] = useState<User>(null);
     const [isAllowed, setIsAllowed] = useState<boolean>(false);
 
-    const login =  (email: string) => {
-        // Validacion de correo de Google
-        const isValidEmail = email.endsWith('google.com');
+    const login =  async (email: string, password: string) => {
+        
+        try {
+            const response = await fetch(`${BASE_URL}/api/Usuarios/login`, {
+                method: "POST", 
+                headers: {
+                    "Content-Type": "application/json", 
+                },
+                body: JSON.stringify({ email, password }), 
+            });
 
-        if (isValidEmail){
-            setUser({email});
-            setIsAllowed(true);
-        }else{
-            setUser(null);
-            setIsAllowed(false);
-            alert("Solo correos del dominio @google.com pueden ingresar")
+            if (response.ok) {
+                const data = await response.json();
+                setUser({ email }); 
+                setIsAllowed(true);  
+                alert("Ingreso exitoso");
+            } else {
+                alert("Correo o contraseña incorrectos.");
+                setIsAllowed(false);
+            }
+        } catch (error) {
+            console.error("Error al hacer login", error);
+            alert("Hubo un error al intentar ingresar.");
         }
     };
 

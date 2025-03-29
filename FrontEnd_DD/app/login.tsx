@@ -19,12 +19,22 @@ const registroProveedorRou = () => {
   router.push('/register_prov'); 
 };
 
+const handleLogin = async () => {
+
+  try {
+      await login(email, password);
+      router.push('/home');
+  } catch (error) {
+      alert("Credenciales incorrectas");
+  }
+}
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Iniciar Sesión</Text>
             <TextInput style={styles.input} placeholder="Correo Electrónico" value={email} onChangeText={setEmail} />
-            <TextInput style={styles.input} placeholder="Contraseña" value={password} onChangeText={setPassword} />
-            <TouchableOpacity style={styles.button} onPress={()=>{login(email); router.replace('/home')}}>
+            <TextInput style={styles.input} placeholder="Contraseña" value={password} onChangeText={setPassword} secureTextEntry/>
+            <TouchableOpacity style={styles.button} onPress={handleLogin}>
               <Text style={styles.buttonText}>Ingresar</Text>
             </TouchableOpacity>
 
